@@ -6,7 +6,9 @@ screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 
 done = False
 
-font = pygame.font.Font('Fixation.ttf', 20)
+bgColor =  pygame.Color('#f4c330')
+
+font = pygame.font.Font('Fixation.ttf', 40)
 
 rendering = font.render("Love", 1, (255,255,0),(255,0,0))
 
@@ -14,7 +16,7 @@ textrect = rendering.get_rect()
 textrect.centerx = screen.get_rect().centerx
 textrect.centery = screen.get_rect().centery
 
-screen.fill((255, 255, 255))
+screen.fill(bgColor)
 screen.blit(rendering, textrect)
 
 
