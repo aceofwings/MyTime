@@ -1,5 +1,5 @@
 import pygame
-
+import endpoints
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
@@ -19,6 +19,8 @@ textrect.centery = screen.get_rect().centery
 screen.fill(bgColor)
 screen.blit(rendering, textrect)
 
+
+routes = get_routes_of_interest()
 
 while not done:
     pygame.display.flip()

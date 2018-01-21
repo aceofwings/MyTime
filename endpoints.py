@@ -10,7 +10,7 @@ route_stops_url = "https://feeds.transloc.com/3/stops?include_routes=true&agenci
 
 #parkpointArrivals = "https://feeds.transloc.com/3/arrivals?agencies=643&stop_id=4209570"
 
-routes_of_interest = ["Weekend Inn & Racquet Club","Perkins Green","The Province", "Park Point","Evening Eastside"]
+routes_of_interest = ["Perkins Green","The Province", "Park Point","Evening Eastside", "Weekend Retail"]
 stops_of_interest = [4177288,4197450,4209570]
 
 def get_current_time():
@@ -22,11 +22,11 @@ def get_all_routes():
 
 def get_current_routes():
     """Routes  that are currently active"""
-    routes = []
+    routes = {}
     req =  requests.get(routes_url).json()
     for route in req['routes']:
         if route['is_active']:
-            routes.append(route)
+            routes[route['id']]  = routeinfo.Route(route['long_name'], route['id'])
     return routes
 
 def get_routes_of_interest():
@@ -72,4 +72,4 @@ def print_routes():
         print(route['long_name'] + " : " + str(route['id']) )
 
 if __name__ == "__main__":
-    pass
+    print_routes()
