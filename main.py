@@ -20,14 +20,15 @@ screen.fill(bgColor)
 screen.blit(rendering, textrect)
 
 
-routes = get_routes_of_interest()
+routes = endpoints.get_routes_of_interest()
 
 while not done:
     pygame.display.flip()
     for event in pygame.event.get():
-        pass
-
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                done = True
+pygame.quit()
 #
 # pygame.display.set_caption('font example')
 # size = [640, 480]
