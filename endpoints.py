@@ -11,6 +11,7 @@ route_stops_url = "https://feeds.transloc.com/3/stops?include_routes=true&agenci
 #parkpointArrivals = "https://feeds.transloc.com/3/arrivals?agencies=643&stop_id=4209570"
 
 routes_of_interest = ["Perkins Green","The Province", "Park Point","Evening Eastside", "Weekend Retail"]
+route_abreviations = ["PG", "TP" , "PP" , "EE" , "WR"]
 stops_of_interest = [4177288,4197450,4209570]
 
 def get_current_time():
@@ -28,26 +29,29 @@ def get_current_routes():
         if route['is_active']:
             routes[route['id']]  = routeinfo.Route(route['long_name'], route['id'])
     return routes
-
 def get_routes_of_interest():
     routes = get_all_routes()
     raw_routes = []
     for route in routes:
-        for route_name in routes_of_interest:
+        for index,route_name in enumerate(routes_of_interest):
             if route['long_name'] == route_name:
+                route['alias'] = route_abreviations[index]
                 raw_routes.append(route)
     routes_infos = {}
     for rr in raw_routes:
-        routes_infos[rr['id']] = routeinfo.Route(rr['long_name'],rr['id'])
+        routes_infos[rr['id']] = routeinfo.Route(rr['long_name'],rr['id'], rr['alias'], rr['color'], rr['is_active'])
 
     stops  = get_assosciated_stops()
     for stop in stops:
         for soi in stops_of_interest:
             if soi in stop['stops']:
-                try:
-                    routes_infos[stop['id']].add_stop(soi)
-                except KeyError:
+                if (stop['id'] == 4010148 or stop['id']  == 4010122)  and  soi != 4209570:
                     pass
+                else:
+                    try:
+                        routes_infos[stop['id']].add_stop(soi)
+                    except KeyError:
+                        pass
     return routes_infos
 
 def get_vechicles():
@@ -59,6 +63,8 @@ def get_assosciated_stops():
 def gets_stops():
     return requests.get(route_stops_url).json()['stops']
 
+def full_stop_request():
+    return requests.get(route_stops_url).json()
 
 def print_stops(route=None):
     stops = requests.get(route_stops_url).json()['stops']
@@ -72,4 +78,7 @@ def print_routes():
         print(route['long_name'] + " : " + str(route['id']) )
 
 if __name__ == "__main__":
-    print_routes()
+    routes = get_routes_of_interest()
+    for key,route in routes.items():
+        for stop in route.route_stops:
+            print(stop.get_estimated_times())
