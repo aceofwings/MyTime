@@ -1,4 +1,6 @@
 import pygame
+import time
+import datetime
 from routeinfo import Cache
 pygame.init()
 pygame.font.init()
@@ -42,11 +44,15 @@ def draw_route_texts():
     start_pos = BusesRect.topleft
     start_pos = (start_pos[0] + margin_left, start_pos[1] + 30 )
     renderings = []
+
     for key,route in routes.items():
 
         routeColor = pygame.Color("#" + route.color)
         if not route.active:
             routeColor = inactiveColor
+        elif route.route_stops[0].next_arrival_time is not None:
+            timeDif = route.route_stops[0].next_arrival_time - time.time()
+            print(str(datetime.timedelta(seconds=timeDif)))
 
         route_name_graphic = font.render(route.alias + " - " , 1, routeColor)
         rect = route_name_graphic.get_rect()
@@ -70,28 +76,3 @@ while not done:
             if event.key == pygame.K_ESCAPE:
                 done = True
 pygame.quit()
-#
-# pygame.display.set_caption('font example')
-# size = [640, 480]
-# screen = pygame.display.set_mode(size)
-#
-# clock = pygame.time.Clock()
-#
-# basicfont = pygame.font.SysFont(None, 48)
-# text = basicfont.render('Hello World!', True, (255, 0, 0), (255, 255, 255))
-# textrect = text.get_rect()
-# textrect.centerx = screen.get_rect().centerx
-# textrect.centery = screen.get_rect().centery
-#
-# screen.fill((255, 255, 255))
-# screen.blit(text, textrect)
-#
-# pygame.display.update()
-#
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.quit()
-#             sys.exit()
-#
-#     clock.tick(20)

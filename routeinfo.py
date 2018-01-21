@@ -86,7 +86,11 @@ class Stop(object):
 
     def update_estimated_times(self):
         stop_times = self.get_estimated_times()
-        print(stop_times)
+        for stop_time in stop_times['arrivals']:
+            if stop_time:
+                if stop_time['route_id'] == self.route_id:
+                    print(stop_time)
+                    self.next_arrival_time = stop_time['timestamp']
 
 
 if __name__ == "__main__":
