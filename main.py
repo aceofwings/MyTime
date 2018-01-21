@@ -3,7 +3,7 @@ import endpoints
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-
+pygame.mouse.set_visible(False)
 done = False
 
 bgColor =  pygame.Color('#f4c330')
@@ -19,6 +19,8 @@ textrect.centery = screen.get_rect().centery
 screen.fill(bgColor)
 screen.blit(rendering, textrect)
 
+bg = pygame.image.load("campus.png")
+screen.blit(bg, (0,0))
 
 routes = endpoints.get_routes_of_interest()
 
