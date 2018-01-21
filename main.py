@@ -6,47 +6,47 @@ pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.mouse.set_visible(False)
 
-done = False
-
-bgColor =  pygame.Color('#f4c330')
-
-inactiveColor = pygame.Color('#BEB7A4')
-
-textColor = pygame.Color('#0C0B0A')
-
 font = pygame.font.Font('Yonky.ttf', 60)
 
-rendering = font.render("Buses", 1, textColor)
+textColor = pygame.Color('#3237AA')
+highlightColor = pygame.Color('#E5471A')
+busBGColor = pygame.Color('#2C6E84')
 
-routes = Cache.get_routes_of_interest()
+Buses = pygame.Surface((600 ,400))
+BusRect = Buses.get_rect(center=(1500, 750))
+Buses.set_alpha(200)
+Buses.fill(busBGColor)
 
-BusesRect = pygame.draw.rect(screen, (0,0,0), (1200,150,600 ,400), 3)
+busText = font.render("Buses", 1, textColor)
+textrect = busText.get_rect()
+textrect.midtop = BusRect.midtop
+textrect.y -= 10
 
-textrect = rendering.get_rect()
-textrect.midtop = BusesRect.midtop
-textrect.y -= 70
-#= screen.get_rect().centery
+background = pygame.image.load("campus.png")
 
 
-bg = pygame.image.load("campus.png")
-screen.blit(bg, (0,0))
-screen.blit(rendering, textrect)
+screen.blit(background, (0,0))
+screen.blit(Buses, BusRect)
+screen.blit(busText, textrect)
+
+
 
 def draw():
-    pygame.draw.rect(screen, (0,0,0), (1200,150,600 ,400), 3)
-
+    pass
+    #pygame.draw.rect(screen, (0,0,0), (1200,150,600 ,400), 3)
 def update_routes():
     Cache.update_stops()
 def draw_route_texts():
-    margin_left = 20
-    start_pos = BusesRect.topleft
-    start_pos = (start_pos[0] + margin_left, start_pos[1] + 30 )
+    margin_left = 15
+    start_pos = BusRect.topleft
+    start_pos = (start_pos[0] + margin_left, start_pos[1] + 60 )
     renderings = []
     for key,route in routes.items():
-
-        routeColor = pygame.Color("#" + route.color)
-        if not route.active:
-            routeColor = inactiveColor
+        #routeColor = pygame.Color("#" + route.color)
+        if route.active:
+            routeColor = highlightColor
+        else:
+            routeColor = textColor
 
         route_name_graphic = font.render(route.alias + " - " , 1, routeColor)
         rect = route_name_graphic.get_rect()
@@ -55,11 +55,10 @@ def draw_route_texts():
         start_pos = (start_pos[0] , start_pos[1] + 60)
 
 
-
-
-
+routes = Cache.get_routes_of_interest()
 draw_route_texts()
 
+done = False
 while not done:
     update_routes()
     draw()
