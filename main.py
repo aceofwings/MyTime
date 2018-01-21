@@ -8,7 +8,7 @@ pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.mouse.set_visible(False)
 
-font = pygame.font.Font('Kingthings.ttf', 60)
+font = pygame.font.Font('zig.ttf', 60)
 
 textColor = pygame.Color('#3237AA')
 highlightColor = pygame.Color('#E5471A')
