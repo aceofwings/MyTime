@@ -8,7 +8,20 @@ class Cache(object):
     current_routes =None
     routes_of_interest = None
 
+    def safety(func):
+        """
+        Wrap the function calls dealing with requests in a safety mechanism
+        I don't know what the decoding error is
+        """
+        def func_wrapper(cls):
+            try:
+                return func(cls)
+            except:
+                print("error occured")
+        return func_wrapper
+
     @classmethod
+    @safety
     def get_current_routes(cls,force=False):
         if cls.last_update is None:
             cls.current_routes = endpoints.get_current_routes()
@@ -24,10 +37,24 @@ class Cache(object):
                 return cls.current_routes
 
     @classmethod
+    @safety
     def get_routes_of_interest(cls):
-        cls.routes_of_interest = endpoints.get_routes_of_interest()
-        return cls.routes_of_interest
+            if cls.last_update is None:
+                cls.routes_of_interest = endpoints.get_routes_of_interest()
+                cls.last_update = time.time()
+                return cls.routes_of_interest
+            else:
+                diff = time.time() - cls.last_update
+                if diff > 30:
+                    cls.routes_of_interest = endpoints.get_routes_of_interest()
+                    cls.last_update = time.time()
+                    return cls.routes_of_interest
+                else:
+                    return cls.routes_of_interest
+            return cls.routes_of_interest
+
     @classmethod
+    @safety
     def update_stops(cls,force=False):
         if cls.last_stop_update is None:
             for key,route in cls.routes_of_interest.items():
@@ -89,7 +116,6 @@ class Stop(object):
         for stop_time in stop_times['arrivals']:
             if stop_time:
                 if stop_time['route_id'] == self.route_id:
-                    print(stop_time)
                     self.next_arrival_time = stop_time['timestamp']
 
 
