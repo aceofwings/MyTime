@@ -8,7 +8,7 @@ pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.mouse.set_visible(False)
 
-font = pygame.font.Font('Fixation.ttf', 60)
+font = pygame.font.Font('Taurus.otf', 60)
 
 textColor = pygame.Color('#3237AA')
 highlightColor = pygame.Color('#E5471A')
@@ -56,7 +56,7 @@ def draw_route_texts():
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
         elif route.active and route.route_stops[0].next_arrival_time is None :
-            time_str = "No prediction"
+            time_str = "Error"
 
         route_name_graphic = font.render(route.alias + " - " + time_str , 1, routeColor)
         rect = route_name_graphic.get_rect()
