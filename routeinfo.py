@@ -116,7 +116,6 @@ class Stop(object):
         for stop_time in stop_times['arrivals']:
             if stop_time:
                 if stop_time['route_id'] == self.route_id:
-                    print("Update",stop_time['timestamp'] )
                     self.next_arrival_time = stop_time['timestamp']
 
 

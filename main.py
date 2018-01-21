@@ -56,7 +56,6 @@ def draw_route_texts():
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
         elif route.active and route.route_stops[0].next_arrival_time is None :
-            print( route.route_stops[0])
             time_str = "No prediction"
 
         route_name_graphic = font.render(route.alias + " - " + time_str , 1, routeColor)
