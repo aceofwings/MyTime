@@ -37,7 +37,7 @@ def redraw():
     screen.blit(Buses, BusRect)
     screen.blit(busText, textrect)
 def update_routes():
-    Cache.update_stops()
+    #Cache.update_stops()
     Cache.get_routes_of_interest()
 
 def draw_route_texts():
@@ -46,7 +46,7 @@ def draw_route_texts():
     start_pos = (start_pos[0] + margin_left, start_pos[1] + 65 )
     renderings = []
     time_str = "None"
-    for key,route in routes.items():
+    for key,route in Cache.get_routes_of_interest().items():
         routeColor = pygame.Color("#" + route.color)
         if not route.active:
             routeColor = highlightColor
@@ -56,6 +56,7 @@ def draw_route_texts():
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
         elif route.active and route.route_stops[0].next_arrival_time is None :
+            print( route.route_stops[0])
             time_str = "No prediction"
 
         route_name_graphic = font.render(route.alias + " - " + time_str , 1, routeColor)
@@ -65,7 +66,6 @@ def draw_route_texts():
         start_pos = (start_pos[0] , start_pos[1] + 60)
 
 
-routes = Cache.get_routes_of_interest()
 draw_route_texts()
 
 done = False
