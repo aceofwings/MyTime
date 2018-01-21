@@ -2,12 +2,11 @@ import pygame
 from routeinfo import Cache
 pygame.init()
 pygame.font.init()
-#screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((1920,1080))
+
+screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+pygame.mouse.set_visible(False)
 
 done = False
-
-
 
 bgColor =  pygame.Color('#f4c330')
 
@@ -28,10 +27,10 @@ textrect.midtop = BusesRect.midtop
 textrect.y -= 70
 #= screen.get_rect().centery
 
-screen.fill(bgColor)
 
+bg = pygame.image.load("campus.png")
+screen.blit(bg, (0,0))
 screen.blit(rendering, textrect)
-
 
 def draw():
     pygame.draw.rect(screen, (0,0,0), (1200,150,600 ,400), 3)
