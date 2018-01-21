@@ -67,13 +67,10 @@ while not done:
     draw_route_texts()
     pygame.display.flip()
     for event in pygame.event.get():
-        pass
-
-
-
-
-
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                done = True
+pygame.quit()
 #
 # pygame.display.set_caption('font example')
 # size = [640, 480]
