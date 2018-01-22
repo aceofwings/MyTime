@@ -5,8 +5,10 @@ import time
 class Cache(object):
     last_update = None
     last_stop_update = None
-    current_routes =None
+    current_routes = None
     routes_of_interest = None
+    bus_bounds = None
+    last_vehicle_update = None
 
     def safety(func):
         """
@@ -69,6 +71,26 @@ class Cache(object):
                     stop.update_estimated_times()
             cls.last_stop_update = time.time()
 
+    @classmethod
+    def update_vehicle_locations(cls, force=False):
+            vechicles = {}
+            vechicles_h = endpoints.get_vechicles()
+            if cls.last_vehicle_update is None or force:
+                for vechicle in vechicles_h:
+                    vechicles[vechicle['route_id']] = vechicle['position']
+                cls.last_vehicle_update = time.time()
+                cls.bus_bounds = vechicles
+                return vechicles
+            diff = time.time() - cls.last_vehicle_update
+            if diff > 2:
+                for vechicle in vechicles_h:
+                    vechicles[vechicle['route_id']] = vechicle['position']
+                cls.last_vehicle_update = time.time()
+                cls.bus_bounds = vechicles
+                return cls.bus_bounds
+            else:
+                return cls.bus_bounds
+
 
 
 class Route(object):
@@ -83,6 +105,8 @@ class Route(object):
         self.alias = alias
         self.color = color
         self.active = active
+        self.busCordinates = (0,0)
+
     def __eq__(self, other):
         return self.route_id == other.route_id
 

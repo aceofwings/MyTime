@@ -2,6 +2,7 @@ import pygame
 import time
 import datetime
 from routeinfo import Cache
+from coordinates import deg2pix
 pygame.init()
 pygame.font.init()
 
@@ -39,6 +40,7 @@ def redraw():
 def update_routes():
     #Cache.update_stops()
     Cache.get_routes_of_interest()
+    Cache.update_vehicle_locations()
 
 def draw_route_texts():
     margin_left = 15
@@ -46,16 +48,18 @@ def draw_route_texts():
     start_pos = (start_pos[0] + margin_left, start_pos[1] + 65 )
     renderings = []
     time_str = "None"
+    bounds = Cache.update_vehicle_locations()
     for key,route in Cache.get_routes_of_interest().items():
 
         if not route.active:
             routeColor = highlightColor
             time_str = "OoS"
-        elif route.route_stops[-1].next_arrival_time is not None:
+        elif route.route_stops[-1].next_arrival_time is not None: #The next stop time estimation time exists
             timeDif = route.route_stops[0].next_arrival_time - time.time()
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
             routeColor = pygame.Color("#" + route.color)
+            pygame.draw.circle(screen,routeColor,deg2pix(bounds[key][0],bounds[key][1]),20)#Decimal to pixel coordinate
         elif route.active and route.route_stops[0].next_arrival_time is None :
             time_str = "Error"
             routeColor = pygame.Color("#8c0202")

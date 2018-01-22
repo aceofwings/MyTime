@@ -55,7 +55,7 @@ def get_routes_of_interest():
     return routes_infos
 
 def get_vechicles():
-    return request.get(vechiles_url)
+    return requests.get(vechiles_url).json()['vehicles']
 
 def get_assosciated_stops():
     return requests.get(route_stops_url).json()['routes']
