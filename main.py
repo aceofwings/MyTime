@@ -47,7 +47,7 @@ def draw_route_texts():
     renderings = []
     time_str = "None"
     for key,route in Cache.get_routes_of_interest().items():
-        routeColor = pygame.Color("#" + route.color)
+
         if not route.active:
             routeColor = highlightColor
             time_str = "OoS"
@@ -55,8 +55,10 @@ def draw_route_texts():
             timeDif = route.route_stops[0].next_arrival_time - time.time()
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
+            routeColor = pygame.Color("#" + route.color)
         elif route.active and route.route_stops[0].next_arrival_time is None :
             time_str = "Error"
+            routeColor = pygame.Color("#8c0202")
 
         route_name_graphic = font.render(route.alias + " - " + time_str , 1, routeColor)
         rect = route_name_graphic.get_rect()
