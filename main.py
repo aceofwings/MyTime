@@ -9,7 +9,7 @@ pygame.font.init()
 screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.mouse.set_visible(False)
 
-font = pygame.font.Font('Fixation.ttf', 60)
+font = pygame.font.Font('Hack.ttf', 60)
 
 textColor = pygame.Color('#3237AA')
 inactiveColor = pygame.Color('#5095AD')
@@ -27,7 +27,6 @@ textrect.y += 10
 
 background = pygame.image.load("campus.png")
 
-
 screen.blit(background, (0,0))
 screen.blit(Buses, BusRect)
 screen.blit(busText, textrect)
@@ -40,7 +39,7 @@ def redraw():
     #pygame.draw.circle(screen,(255,0,0),deg2pix(t2x,t2y),10)
     #pygame.draw.circle(screen,(255,0,0),deg2pix(t3x,t3y),10)
 def update_routes():
-    Cache.update_stops()
+    #Cache.update_stops()
     Cache.get_routes_of_interest()
 
 def draw_route_texts():
@@ -50,19 +49,19 @@ def draw_route_texts():
     renderings = []
     time_str = "None"
     for key,route in routes.items():
-        routeColor = pygame.Color(route.color)
         if not route.active:
             routeColor = inactiveColor
-            time_str = "OoS"
+            time_str = "closed"#else active
         elif route.route_stops[0].next_arrival_time is not None:
             timeDif = route.route_stops[0].next_arrival_time - time.time()
             time_str =  time.strftime("%M", time.gmtime(timeDif))
-        elif route.active and route.route_stops[0].next_arrival_time is None :
-            time_str = "No prediction"
-        if route.active:
-            pplat = route.bounds[0]
-            pplon = route.bounds[1]
-            pygame.draw.circle(screen,routeColor,deg2pix(pplat,pplon),20)
+            routeColor = pygame.Color(route.color)
+            lat = route.bounds[0]
+            lon = route.bounds[1]
+            pygame.draw.circle(screen,routeColor,deg2pix(lat,lon),20)#Decimal to pixel coordinate
+        else:#arrival not determinite
+            time_str = "fucked"
+
         route_name_graphic = font.render(route.alias + " - " + time_str , 1, routeColor)
         rect = route_name_graphic.get_rect()
         rect.topleft = start_pos

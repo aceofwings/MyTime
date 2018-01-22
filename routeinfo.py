@@ -21,7 +21,7 @@ class Cache(object):
         return func_wrapper
 
     @classmethod
-    @safety
+    #@safety
     def get_current_routes(cls,force=False):
         if cls.last_update is None:
             cls.current_routes = endpoints.get_current_routes()
@@ -37,7 +37,7 @@ class Cache(object):
                 return cls.current_routes
 
     @classmethod
-    @safety
+#    @safety
     def get_routes_of_interest(cls):
             if cls.last_update is None:
                 cls.routes_of_interest = endpoints.get_routes_of_interest()
@@ -45,18 +45,18 @@ class Cache(object):
                 return cls.routes_of_interest
             else:
                 diff = time.time() - cls.last_update
-                if diff > 30:
+                if diff > 15:
                     cls.routes_of_interest = endpoints.get_routes_of_interest()
+                    cls.update_stops(force=True)
                     cls.last_update = time.time()
                     return cls.routes_of_interest
                 else:
                     return cls.routes_of_interest
-            return cls.routes_of_interest
 
     @classmethod
-    @safety
+    #@safety
     def update_stops(cls,force=False):
-        if cls.last_stop_update is None:
+        if cls.last_stop_update is None or force:
             for key,route in cls.routes_of_interest.items():
                 for stop in route.route_stops:
                     stop.update_estimated_times()
