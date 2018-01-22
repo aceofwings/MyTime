@@ -51,7 +51,7 @@ def draw_route_texts():
         if not route.active:
             routeColor = highlightColor
             time_str = "OoS"
-        elif route.route_stops[0].next_arrival_time is not None:
+        elif route.route_stops[-1].next_arrival_time is not None:
             timeDif = route.route_stops[0].next_arrival_time - time.time()
             routeColor = textColor
             time_str =  time.strftime("%M", time.gmtime(timeDif))
