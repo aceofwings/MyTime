@@ -75,7 +75,7 @@ class Route(object):
     route_id = None
     route_name = None
 
-    def __init__(self,name,route_id,alias,color,active):
+    def __init__(self,name,route_id,alias,color,active,bounds):
         super().__init__()
         self.name = name
         self.route_id = route_id
@@ -83,6 +83,7 @@ class Route(object):
         self.alias = alias
         self.color = color
         self.active = active
+        self.bounds = bounds
     def __eq__(self, other):
         return self.route_id == other.route_id
 

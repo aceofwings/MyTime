@@ -12,6 +12,7 @@ route_stops_url = "https://feeds.transloc.com/3/stops?include_routes=true&agenci
 
 routes_of_interest = ["Perkins Green","The Province", "Park Point","Evening Eastside", "Weekend Retail"]
 route_abreviations = ["PG", "TP" , "PP" , "EE" , "WR"]
+colors_of_interest = {"PG":'#18E609', "TP":'#F75809', "PP":'#93426F', "EE":'#FF77A6', "WR":'#FFFF00'}
 stops_of_interest = [4177288,4197450,4209570]
 
 def get_current_time():
@@ -38,8 +39,10 @@ def get_routes_of_interest():
                 route['alias'] = route_abreviations[index]
                 raw_routes.append(route)
     routes_infos = {}
+    counter = 0
     for rr in raw_routes:
-        routes_infos[rr['id']] = routeinfo.Route(rr['long_name'],rr['id'], rr['alias'], rr['color'], rr['is_active'])
+        color = colors_of_interest[rr['alias']]
+        routes_infos[rr['id']] = routeinfo.Route(rr['long_name'],rr['id'], rr['alias'], color, rr['is_active'], rr['bounds'])
 
     stops  = get_assosciated_stops()
     for stop in stops:
