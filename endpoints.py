@@ -55,16 +55,25 @@ def get_routes_of_interest():
     return routes_infos
 
 def get_vechicles():
-    return requests.get(vechiles_url).json()['vehicles']
+    request = requests.get(vechiles_url)
+    if request.status_code == 200:
+        return request.json()['vehicles']
+
 
 def get_assosciated_stops():
-    return requests.get(route_stops_url).json()['routes']
+    request = requests.get(route_stops_url)
+    if request.status_code == 200:
+        return request.json()['routes']
 
 def gets_stops():
-    return requests.get(route_stops_url).json()['stops']
+    request = requests.get(route_stops_url)
+    if request.status_code == 200:
+        return request.json()['stops']
 
 def full_stop_request():
-    return requests.get(route_stops_url).json()
+    request = requests.get(vechiles_url)
+    if request.status_code == 200:
+        return request.json()
 
 def print_stops(route=None):
     stops = requests.get(route_stops_url).json()['stops']

@@ -54,6 +54,9 @@ class Cache(object):
                     return cls.routes_of_interest
                 else:
                     return cls.routes_of_interest
+    @classmethod
+    def update_routes_of_interest(cls):
+        pass
 
     @classmethod
     #@safety
