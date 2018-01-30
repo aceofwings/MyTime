@@ -15,11 +15,11 @@ class Cache(object):
         Wrap the function calls dealing with requests in a safety mechanism
         I don't know what the decoding error is
         """
-        def func_wrapper(cls):
+        def func_wrapper(cls,**kwargs):
             try:
                 return func(cls)
             except endpoints.BadRequest:
-                return func(cls,cache=True)
+                return func(cls,**kwargs)
         return func_wrapper
 
     @classmethod
