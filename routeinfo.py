@@ -18,13 +18,15 @@ class Cache(object):
         def func_wrapper(cls):
             try:
                 return func(cls)
-            except:
-                print("error occured")
+            except endpoints.BadRequest:
+                return func(cls,cache=True)
         return func_wrapper
 
     @classmethod
     #@safety
-    def get_current_routes(cls,force=False):
+    def get_current_routes(cls,force=False, cache=False):
+        if cache:
+            return cls.current_routes
         if cls.last_update is None:
             cls.current_routes = endpoints.get_current_routes()
             cls.last_update = time.time()
@@ -39,28 +41,32 @@ class Cache(object):
                 return cls.current_routes
 
     @classmethod
-#    @safety
-    def get_routes_of_interest(cls):
-            if cls.last_update is None:
+    #@safety
+    def get_routes_of_interest(cls,cache = False):
+        if cache:
+            return cls.routes_of_interest
+        if cls.last_update is None:
+            cls.routes_of_interest = endpoints.get_routes_of_interest()
+            cls.last_update = time.time()
+            return cls.routes_of_interest
+        else:
+            diff = time.time() - cls.last_update
+            if diff > 15:
                 cls.routes_of_interest = endpoints.get_routes_of_interest()
+                cls.update_stops(force=True)
                 cls.last_update = time.time()
                 return cls.routes_of_interest
             else:
-                diff = time.time() - cls.last_update
-                if diff > 15:
-                    cls.routes_of_interest = endpoints.get_routes_of_interest()
-                    cls.update_stops(force=True)
-                    cls.last_update = time.time()
-                    return cls.routes_of_interest
-                else:
-                    return cls.routes_of_interest
+                return cls.routes_of_interest
     @classmethod
     def update_routes_of_interest(cls):
         pass
 
     @classmethod
-    #@safety
-    def update_stops(cls,force=False):
+    #safety
+    def update_stops(cls,force=False,cache=False):
+        if cache:
+            return
         if cls.last_stop_update is None or force:
             for key,route in cls.routes_of_interest.items():
                 for stop in route.route_stops:
@@ -75,24 +81,27 @@ class Cache(object):
             cls.last_stop_update = time.time()
 
     @classmethod
-    def update_vehicle_locations(cls, force=False):
-            vechicles = {}
-            vechicles_h = endpoints.get_vechicles()
-            if cls.last_vehicle_update is None or force:
-                for vechicle in vechicles_h:
-                    vechicles[vechicle['route_id']] = vechicle['position']
-                cls.last_vehicle_update = time.time()
-                cls.bus_bounds = vechicles
-                return vechicles
-            diff = time.time() - cls.last_vehicle_update
-            if diff > 2:
-                for vechicle in vechicles_h:
-                    vechicles[vechicle['route_id']] = vechicle['position']
-                cls.last_vehicle_update = time.time()
-                cls.bus_bounds = vechicles
-                return cls.bus_bounds
-            else:
-                return cls.bus_bounds
+    #safety
+    def update_vehicle_locations(cls, force=False,cache=False):
+        if cache:
+            return cls.bus_bounds
+        vechicles = {}
+        vechicles_h = endpoints.get_vechicles()
+        if cls.last_vehicle_update is None or force:
+            for vechicle in vechicles_h:
+                vechicles[vechicle['route_id']] = vechicle['position']
+            cls.last_vehicle_update = time.time()
+            cls.bus_bounds = vechicles
+            return vechicles
+        diff = time.time() - cls.last_vehicle_update
+        if diff > 2:
+            for vechicle in vechicles_h:
+                vechicles[vechicle['route_id']] = vechicle['position']
+            cls.last_vehicle_update = time.time()
+            cls.bus_bounds = vechicles
+            return cls.bus_bounds
+        else:
+            return cls.bus_bounds
 
 
 

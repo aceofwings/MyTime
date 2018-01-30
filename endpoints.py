@@ -64,21 +64,30 @@ def get_assosciated_stops():
     request = requests.get(route_stops_url)
     if request.status_code == 200:
         return request.json()['routes']
+    else:
+        raise BadRequest()
+
 
 def gets_stops():
     request = requests.get(route_stops_url)
     if request.status_code == 200:
         return request.json()['stops']
+    else:
+        raise BadRequest()
 
 def full_stop_request():
     request = requests.get(vechiles_url)
     if request.status_code == 200:
         return request.json()
+    else:
+        raise BadRequest()
 
 def full_stop_request(agency,id):
     request = requests.get("https://feeds.transloc.com/3/arrivals",{'agencies' : agency , 'stop_id' : id})
     if request.status_code == 200:
         return request.json()
+    else:
+        raise BadRequest()
 
 def print_stops(route=None):
     stops = requests.get(route_stops_url).json()['stops']
@@ -96,3 +105,6 @@ if __name__ == "__main__":
     for key,route in routes.items():
         for stop in route.route_stops:
             print(stop.get_estimated_times())
+
+class BadRequest(Exception):
+    pass
