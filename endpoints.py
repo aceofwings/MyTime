@@ -75,6 +75,11 @@ def full_stop_request():
     if request.status_code == 200:
         return request.json()
 
+def full_stop_request(agency,id):
+    request = requests.get("https://feeds.transloc.com/3/arrivals",{'agencies' : agency , 'stop_id' : id})
+    if request.status_code == 200:
+        return request.json()
+
 def print_stops(route=None):
     stops = requests.get(route_stops_url).json()['stops']
     for stop in stops:

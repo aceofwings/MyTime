@@ -50,7 +50,6 @@ def draw_route_texts():
     time_str = "None"
     bounds = Cache.update_vehicle_locations()
     for key,route in Cache.get_routes_of_interest().items():
-
         if not route.active:
             routeColor = highlightColor
             time_str = "OoS"

@@ -136,15 +136,16 @@ class Stop(object):
         self.route_id = route_id
 
     def get_estimated_times(self):
-        return requests.get("https://feeds.transloc.com/3/arrivals",{'agencies' : self.agency , 'stop_id' : self.id}).json()
+        return endpoints.full_stop_request(self.agency,self.id)
 
     def update_estimated_times(self):
         stop_times = self.get_estimated_times()
-        if stop_times['arrivals']:
-            stop_time  = stop_times['arrivals'][0]
-            if stop_time:
-                if stop_time['route_id'] == self.route_id:
-                    self.next_arrival_time = stop_time['timestamp']
+        if stop_times is not None:
+            if stop_times['arrivals']:
+                stop_time  = stop_times['arrivals'][0]
+                if stop_time:
+                    if stop_time['route_id'] == self.route_id:
+                        self.next_arrival_time = stop_time['timestamp']
 
 
 if __name__ == "__main__":
