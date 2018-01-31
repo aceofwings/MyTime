@@ -6,7 +6,7 @@ from coordinates import deg2pix
 pygame.init()
 pygame.font.init()
 
-screen = pygame.display.set_mode((1920,1080))#, pygame.FULLSCREEN)
+screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.mouse.set_visible(False)
 
 font = pygame.font.Font('Hack.ttf', 60)

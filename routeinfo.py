@@ -95,7 +95,6 @@ class Cache(object):
             return vechicles
         diff = time.time() - cls.last_vehicle_update
         if diff > 2:
-            print("Hello")
             for vechicle in vechicles_h:
                 cls.bus_bounds[vechicle['route_id']] = vechicle['position']
             cls.last_vehicle_update = time.time()
